@@ -25,9 +25,11 @@ for width in range(512):
         plot_data[height][width] = [255, 0, 0]
         plot_data[511-height][width] = [0,0,255]
 
+print(plot_data)
+
 # Write the modified images
 image.imsave(path+'/'+'lenna-mod.jpg', plot_data)
 
 # use pyplot to plot the image
-pyplot.imshow(plot_data)
+# pyplot.imshow(plot_data)
 pyplot.show()

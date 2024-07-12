@@ -77,4 +77,4 @@ for index in range(trial_total):
     query_result = search_list[index] in DictionaryTotal
 elapsed_time = time.time() - begin_time
 print("Searching a size-{0} dictionary 1M times takes: {1}s".format(len(DictionaryTotal),
-    elapsed_time))
+    elapsed_time)) #search
