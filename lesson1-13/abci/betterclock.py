@@ -42,10 +42,10 @@ def clock_hand_vector(angle, length):
     return np.array([length * np.sin(angle), -length * np.cos(angle)])
 
 # draw an image background
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
 
 while True:
-    plt.imshow(background)
+    # plt.imshow(background)
 
     # First retrieve the time
     now_time = datetime.now() # get actual current time
@@ -55,16 +55,20 @@ while True:
     second = now_time.second
 
     # just calculating end points of hour, minute, second
-    hour_vector = clock_hand_vector(hour/12*2*np.pi, hour_hand_length)
-    minute_vector = clock_hand_vector(minute/60*2*np.pi, minute_hand_length)
     second_vector = clock_hand_vector(second/60*2*np.pi, second_hand_length)
+    print(second)
+    # minute_vector = clock_hand_vector(minute/60*2*np.pi, minute_hand_length)
+    # hour_vector = clock_hand_vector(hour/12*2*np.pi, hour_hand_length)
+
 
     # moving the origin to the center, not at (0,0), which is not at the center of the screen
-    plt.arrow(center[0], center[1], hour_vector[0], hour_vector[1], head_length = 3, linewidth = hour_hand_width, color = 'black')
-    plt.arrow(center[0], center[1], minute_vector[0], minute_vector[1], linewidth = minute_hand_width, color = 'black')
-    plt.arrow(center[0], center[1], second_vector[0], second_vector[1], linewidth = second_hand_width, color = 'red')
+    # plt.arrow(center[0], center[1], hour_vector[0], hour_vector[1], head_length = 3, linewidth = hour_hand_width, color = 'black')
+    # plt.arrow(center[0], center[1], minute_vector[0], minute_vector[1], linewidth = minute_hand_width, color = 'black')
+    # plt.arrow(center[0], center[1], second_vector[0], second_vector[1], linewidth = second_hand_width, color = 'red')
+
+    # plt.axis("off") #removing axes
 
     #pause. why? because the program will run faster than time.
-    plt.pause(0.1)
+    # plt.pause(0.0000001)
     # clear plot. why? because this will clear your past drawing.
-    plt.clf()
+    # plt.clf()

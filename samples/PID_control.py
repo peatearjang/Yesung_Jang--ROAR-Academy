@@ -8,6 +8,11 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+"""
+basic four-wheel car has three degrees of freedom: 2d planar coordinates and turning(aka panning), which can be turned to radians.
+(x, y, theta)
+"""
 class Vehicle2D(object):
     def __init__(self, length=10.0):
         """
@@ -15,11 +20,13 @@ class Vehicle2D(object):
         """
         self.x = 0.0
         self.y = 0.0
-        self.orientation = 0.0
+        self.orientation = 0.0 # starting theta of your car
         self.length = length
-        self.steering_noise = 0.0
-        self.distance_noise = 0.0
-        self.steering_drift = 0.0
+
+        # add custom noise to your car/object
+        self.steering_noise = 10.0
+        self.distance_noise = 12.0
+        self.steering_drift = 15.0
 
     def set(self, x, y, orientation):
         """
@@ -29,6 +36,7 @@ class Vehicle2D(object):
         self.y = y
         self.orientation = orientation % (2.0 * np.pi)
 
+    # just adding noise for situations if your car/object is jittery or weird
     def set_noise(self, steering_noise, distance_noise):
         """
         Sets the noise parameters.
@@ -37,12 +45,14 @@ class Vehicle2D(object):
         self.steering_noise = steering_noise
         self.distance_noise = distance_noise
 
+    # adding a steering drift if your car/object has a steering that drifts too much
     def set_steering_drift(self, drift):
         """
         Sets the systematical steering drift parameter
         """
         self.steering_drift = drift
 
+# calculating the equation of PID
     def move(self, steering, distance, tolerance=0.001, max_steering_angle=np.pi / 4.0):
         """
         steering = front wheel steering angle, limited by max_steering_angle(max 90 degree)
@@ -68,17 +78,24 @@ class Vehicle2D(object):
         # Execute motion
         turn = np.tan(steering2) * distance2 / self.length
 
+        #if statement means if the turn is very small, use this equation
         if abs(turn) < tolerance:
             # approximate by straight line motion
             self.x += distance2 * np.cos(self.orientation)
             self.y += distance2 * np.sin(self.orientation)
+            #turning your car
             self.orientation = (self.orientation + turn) % (2.0 * np.pi)
+        
+        #else that the turn is large
         else:
             # approximate bicycle model for motion
             radius = distance2 / turn
+            #cx and cy represent the rotation center of the object 
             cx = self.x - (np.sin(self.orientation) * radius)
             cy = self.y + (np.cos(self.orientation) * radius)
+            #turning your car
             self.orientation = (self.orientation + turn) % (2.0 * np.pi)
+
             self.x = cx + (np.sin(self.orientation) * radius)
             self.y = cy - (np.cos(self.orientation) * radius)
 
@@ -113,9 +130,9 @@ class Vehicle2D(object):
     def __repr__(self):
         return '[x=%.5f y=%.5f orient=%.5f]' % (self.x, self.y, self.orientation)
 
-vehicle = Vehicle2D()
+vehicle = Vehicle2D() #create a vehcile
 vehicle.set(0, 1, 0)
-vehicle.set_steering_drift(10/180.*np.pi)
+vehicle.set_steering_drift(10/180.*np.pi) # set a drift, a problem for the PID controller to fix
 
 track_length = 1000
 targets = []; track_x = []; track_y = []
@@ -126,7 +143,7 @@ for i in range(300,600):
 for i in range(600,track_length):
     targets.append([i, 0]); track_x.append(i); track_y.append(0)
 
-K_p = 0.2; K_d = 3; K_i = 0.0005
+K_p = 0.2; K_d = 3; K_i = 0.0005 # these are coefficients for PID -> these are fine tuned for whatever runs on a PID controller. it can be a car, a robot, irrigation system, etc.
 x_trajectory, y_trajectory = vehicle.run_PID(targets, K_p, K_d, K_i, track_length)  
 n = len(x_trajectory)
 

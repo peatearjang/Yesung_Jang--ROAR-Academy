@@ -61,7 +61,7 @@ testingY = labels[randomOrder[100:200]]
 model = Sequential()
 model.add(Dense(1, input_shape=(2,), activation='sigmoid', use_bias=False))
 model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['binary_accuracy'])
-model.fit(trainingX, trainingY, epochs=100, batch_size=10, verbose=1, validation_split=0.2)
+model.fit(trainingX, trainingY, epochs=100, batch_size=10, verbose=1, validation_split=0.2) # epoch = iterations of samples, sample size
 
 # score = model.evaluate(testingX, testingY, verbose=0)
 score = 0

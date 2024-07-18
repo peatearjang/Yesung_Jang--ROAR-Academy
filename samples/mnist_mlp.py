@@ -33,6 +33,7 @@ x_test = x_test.reshape(x_test.shape[0], img_rows*img_cols)
 input_shape = (img_rows*img_cols,)
 
 # When calculating image data, convert from uint8 to float
+# bytes to float32
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
 
@@ -48,6 +49,7 @@ y_train = keras.utils.np_utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.np_utils.to_categorical(y_test, num_classes)
 
 model = Sequential()
+#4 layers
 model.add(Dense(800, input_shape=input_shape, activation='relu'))
 model.add(Dense(800, activation='relu'))
 model.add(Dense(128, activation='relu'))

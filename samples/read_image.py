@@ -31,5 +31,5 @@ print(plot_data)
 image.imsave(path+'/'+'lenna-mod.jpg', plot_data)
 
 # use pyplot to plot the image
-# pyplot.imshow(plot_data)
+pyplot.imshow(plot_data)
 pyplot.show()
